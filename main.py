@@ -18,15 +18,12 @@ state = "play"
 
 while True:
     if (state == "play"):
-        readVideo = video.read()
-        check = readVideo[0]
+        check, image = video.read()
         if (check):
-            image = readVideo[1]
             image = cv2.resize(image, (0, 0), fx=0.4, fy=0.4)
 
             dimensions = image.shape[:2]
-            H = dimensions[0]
-            W = dimensions[1]
+            H, W = dimensions
             blob = cv2.dnn.blobFromImage(image, 1/255, (416, 416))
             yoloNetwork.setInput(blob)
 
@@ -60,10 +57,7 @@ while True:
             for i in range(len(boxes)):
                 if i in indexes:
                     if labels[classIds[i]] == "sports ball":
-                        x = boxes[i][0]
-                        y = boxes[i][1]
-                        w = boxes[i][2]
-                        h = boxes[i][3]
+                        x, y, w, h = boxes[i]
                         color = (255, 0, 0)
                         cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
 
